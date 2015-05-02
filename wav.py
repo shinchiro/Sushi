@@ -180,8 +180,11 @@ class WavStream(object):
 
         start_sample = self._get_sample_for_time(start_time)
         end_sample = self._get_sample_for_time(end_time) + len(pattern[0])
-
         search_source = self.data[:, start_sample:end_sample]
+        
+        search_source = cv2.GaussianBlur(search_source, (5, 5), 0)
+        pattern = cv2.GaussianBlur(pattern, (5, 5), 0)
+        		
         result = cv2.matchTemplate(search_source, pattern, cv2.TM_SQDIFF_NORMED)
         min_idx = result.argmin(axis=1)[0]
 
